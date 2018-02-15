@@ -1,0 +1,33 @@
+version: '3'
+
+#volumes:
+#  jenkins-data:
+
+services:
+  jenkins:
+    image: ci-tool-stack/jenkins:${VERSION:-latest}
+    build:
+      context: .
+      args:
+        - http_proxy=$http_proxy
+        - https_proxy=$https_proxy
+        - no_proxy=$no_proxy
+        - MIRROR_DEBIAN
+        - MIRROR_DOCKER
+        - MIRROR_DOCKER_COMPOSE
+        - JENKINS_UC_URL
+        - PYPI_URL
+        - PYPI_HOST
+
+#    restart: always
+    ports:
+      - "18080:8080"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /usr/bin/docker:/usr/bin/docker
+#      - jenkins-data:/var/lib/jenkins/
+    environment:
+      - JENKINS_OPTS="--prefix=/jenkins"
+      - NEXUS_PORT=8081
+      - SONAR_PORT=9000
+      - SONAR_DB_PORT=5432
