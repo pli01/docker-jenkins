@@ -5,12 +5,13 @@ version: '3'
 
 services:
   jenkins:
-    build:
-      context: .
-      args:
-        - http_proxy=$http_proxy
-        - https_proxy=$https_proxy
-        - no_proxy=$no_proxy
+    image: ci-tool-stack/jenkins:${VERSION:-latest}
+#    build:
+#      context: .
+#      args:
+#        - http_proxy=$http_proxy
+#        - https_proxy=$https_proxy
+#        - no_proxy=$no_proxy
 #    restart: always
     ports:
       - "18080:8080"
