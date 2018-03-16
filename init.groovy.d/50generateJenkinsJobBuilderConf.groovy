@@ -8,7 +8,7 @@ import java.io.File
 def env = System.getenv()
 
 // TODO: ENV at run time : list space separated
-userListParameter = "jenkins admin"
+userListParameter = env['JENKINS_JOB_USER_LIST'] ?: "jenkins admin"
 
 def userList = userListParameter.split()
 

@@ -14,7 +14,7 @@ services:
 #        - no_proxy=$no_proxy
 #    restart: always
     ports:
-      - "18080:8080"
+      - "8080"
 #    volumes:
 #      - /var/run/docker.sock:/var/run/docker.sock
 #      - /usr/bin/docker:/usr/bin/docker
@@ -24,3 +24,4 @@ services:
       - NEXUS_PORT=8081
       - SONAR_PORT=9000
       - SONAR_DB_PORT=5432
+      - JENKINS_JOB_USER_LIST=jenkins
