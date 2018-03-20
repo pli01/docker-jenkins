@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.89.4
 # Env Variables
 ARG MIRROR_DEBIAN
 ARG PYPI_URL
