@@ -1,4 +1,5 @@
 FROM jenkins/jenkins:2.89.4
+#FROM jenkins/jenkins:lts
 # Env Variables
 ARG MIRROR_DEBIAN
 ARG PYPI_URL
@@ -56,9 +57,9 @@ RUN adduser jenkins shadow
 # install pip requirements
 #  optionnel, use nexus repo to speed up
 COPY requirements.txt /usr/share/jenkins/requirements.txt
-RUN set -x && [ -z "$PYPI_URL" ] || pip_args=" --index-url $PYPI_URL " ; \
+RUN set -ex && [ -z "$PYPI_URL" ] || pip_args=" --index-url $PYPI_URL " ; \
     [ -z "$PYPI_HOST" ] || pip_args="$pip_args --trusted-host $PYPI_HOST " ; \
-    echo "$no_proxy" |tr ',' '\n' |grep "^$PYPI_HOST$" || \
+    echo "$no_proxy" |tr ',' '\n' | sort -u |grep "^$PYPI_HOST$" || \
       [ -z "$http_proxy" ] || pip_args="$pip_args --proxy $http_proxy " ; \
     pip install $pip_args -I -r /usr/share/jenkins/requirements.txt
 
