@@ -8,6 +8,7 @@ services:
     image: ci-tool-stack/jenkins:${VERSION:-latest}
     build:
       context: .
+      dockerfile: Dockerfile.${VERSION:-latest}
       args:
         - http_proxy=$http_proxy
         - https_proxy=$https_proxy

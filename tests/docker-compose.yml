@@ -6,12 +6,6 @@ version: '3'
 services:
   jenkins:
     image: ci-tool-stack/jenkins:${VERSION:-latest}
-#    build:
-#      context: .
-#      args:
-#        - http_proxy=$http_proxy
-#        - https_proxy=$https_proxy
-#        - no_proxy=$no_proxy
 #    restart: always
     ports:
       - "8080"

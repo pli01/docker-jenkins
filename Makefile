@@ -16,13 +16,16 @@ clean:
 	$(sudo) docker system prune -f
 .PHONY: config
 config:
-	$(sudo) docker-compose $(compose_args) config
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) config
 
 .PHONY: build
-build: config
-	$(sudo) docker-compose $(compose_args) build
+prepare:
+	if [ ! -f Dockerfile.template ] ; then cp Dockerfile Dockerfile.template ; fi
+	sed -e 's|\(FROM .*\):\(.*\)|\1:$(VERSION)|' Dockerfile.template > Dockerfile.$(VERSION)
+build: prepare config
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) build
 pull:
-	$(sudo) docker-compose $(compose_args) pull
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) pull
 up:
 	$(sudo) docker-compose $(compose_args) up -d
 restart:
