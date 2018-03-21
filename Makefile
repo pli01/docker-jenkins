@@ -14,6 +14,8 @@ compose_args += $(shell [ -f  docker-compose.$(env).yml ] && echo "-f docker-com
 all: stop rm up
 clean:
 	$(sudo) docker system prune -f
+	if [ -f Dockerfile.template ] ; then rm -rf Dockerfile.template ; fi
+	if [ -f Dockerfile.$(VERSION) ] ; then rm -rf Dockerfile.$(VERSION) ; fi
 .PHONY: config
 config:
 	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) config
