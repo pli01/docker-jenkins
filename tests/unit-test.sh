@@ -27,8 +27,9 @@ else
   ret=1
 fi
 
+test -t 1 && USE_TTY="-t"
 echo "Check docker version"
-docker run -it --rm $image_name:$version /bin/bash -c 'docker version || true'
+docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'docker version || true'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] docker version"
@@ -38,7 +39,7 @@ else
 fi
 
 echo "Check docker-compose version"
-docker run -it --rm $image_name:$version /bin/bash -c 'docker-compose -p ${namespace} version || true'
+docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'docker-compose -p ${namespace} version || true'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] docker-compose version"
