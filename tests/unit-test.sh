@@ -18,8 +18,14 @@ else
   ret=1
 fi
 echo "Check Jenkins version"
+if [ "$VERSION" == "latest" ] ;then
+docker-compose -p ${namespace} run --name "test-$test_service" --rm $test_service --version
+test_result=$?
+else
 docker-compose -p ${namespace} run --name "test-$test_service" --rm $test_service --version | grep "${VERSION}"
 test_result=$?
+fi
+
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] jenkins --version $VERSION"
 else
