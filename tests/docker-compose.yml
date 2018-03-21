@@ -3,6 +3,14 @@ version: '3'
 #volumes:
 #  jenkins-data:
 
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+      com.docker.network.enable_ipv4: "true"
+      com.docker.network.driver.mtu: 1450
+
 services:
   jenkins:
     image: ci-tool-stack/jenkins:${VERSION:-latest}
@@ -19,3 +27,5 @@ services:
       - SONAR_PORT=9000
       - SONAR_DB_PORT=5432
       - JENKINS_JOB_USER_LIST=jenkins
+    env_file:
+      - test-config.env

@@ -58,10 +58,9 @@ clean-package:
 test: build unit-test
 	@echo '# $@ SUCCESS'
 
-
 unit-test:
 	@echo '# $@ STARTING'
-	( cd tests && bash unit-test.sh $(IMAGE_NAME) $(VERSION) )
+	( cd tests && VERSION=$(VERSION) bash unit-test.sh $(IMAGE_NAME) $(VERSION) )
 	@echo '# $@ SUCCESS'
 
 publish: package dist/$(PACKAGENAME)-$(VERSION).tar.gz

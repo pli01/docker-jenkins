@@ -29,6 +29,7 @@ def ldap_inhibitInferRootDN = env['LDAP_INHIBIT_INFER_ROOTDN'].toBoolean()
 def ldap_disableMailAddressResolver = env['LDAP_DISABLE_MAIL_ADDRESS_RESOLVER'].toBoolean()
 def ldap_displayNameAttributeName = env['LDAP_DISPLAY_NAME_ATTRIBUTE_NAME']
 def ldap_mailAddressAttributeName = env['LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME']
+def ldap_ignoreIfUnavailable = env['LDAP_IGNORE_IF_UNAVAILABLE'].toBoolean()
 
 // Constants
 def instance = Jenkins.getInstance()
@@ -84,6 +85,9 @@ Thread.start {
         IdStrategy.CASE_INSENSITIVE, //IdStrategy userIdStrategy
         IdStrategy.CASE_INSENSITIVE //IdStrategy groupIdStrategy >> defaults
     )
+
+    // set ignoreIfUnavailable
+    ldapRealm.configurations.get(0).setIgnoreIfUnavailable(true)
 
     instance.setSecurityRealm(ldapRealm)
 

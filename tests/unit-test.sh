@@ -1,20 +1,87 @@
 #!/bin/bash
-set -x
+#set -x
 
 image_name=${1:? $(basename $0) IMAGE_NAME VERSION needed}
 version=${2:-latest}
 namespace=jenkins
+test_service=jenkins
+test_compose=docker-compose.yml
 
-echo "Check docker-compose -p ${namespace} config"
+ret=0
+echo "Check tests/docker-compose.yml config"
 docker-compose -p ${namespace} config
-
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] docker-compose -p ${namespace} config"
+else
+  echo "[FAILED] docker-compose -p ${namespace} config"
+  ret=1
+fi
 echo "Check Jenkins version"
-docker-compose -p ${namespace} run --rm jenkins --version
+docker-compose -p ${namespace} run --name "test-$test_service" --rm $test_service --version | grep "${VERSION}"
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] jenkins --version $VERSION"
+else
+  echo "[FAILED] jenkins --version $VERSION"
+  ret=1
+fi
 
 echo "Check docker version"
-docker run -it --rm $image_name /bin/bash -c 'docker version || true'
-docker run -it --rm $image_name /bin/bash -c 'docker-compose -p ${namespace} version || true'
+docker run -it --rm $image_name:$version /bin/bash -c 'docker version || true'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] docker version"
+else
+  echo "[FAILED] docker version"
+  ret=1
+fi
+
+echo "Check docker-compose version"
+docker run -it --rm $image_name:$version /bin/bash -c 'docker-compose -p ${namespace} version || true'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] docker-compose version"
+else
+  echo "[FAILED] docker-compose version"
+  ret=1
+fi
+
+echo "Check LDAP config"
+docker-compose -p ${namespace} -f $test_compose up -d --no-build $test_service
+
+# Wait service up and running
+RETRY_NB=240
+RETRY_DELAY_IN_SEC=1
+n=0
+state=1
+echo "Wait $RETRY_NB second for $test_service ready ?"
+until [ $n -ge $RETRY_NB ] || [ $state -eq 0 ]; do
+ if docker-compose -p ${namespace} -f $test_compose logs --tail=10  |grep -q  'INFO: Jenkins is fully up and running' ; then
+   echo "$test_service ready"
+   state=$?
+ else
+   echo "Test failed at $n try"
+   sleep $RETRY_DELAY_IN_SEC
+   sleep 1
+ fi
+ ((n++))
+done
+
+docker-compose -p ${namespace} -f $test_compose exec -T $test_service /bin/bash -c 'grep ignoreIfUnavailable $HOME/config.xml'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] Check LDAP conf"
+else
+  echo "[FAILED] Check LDAP conf"
+  ret=1
+fi
+
+# teardown
+echo "# teardown:"
+docker-compose -p ${namespace} -f $test_compose stop
+docker-compose -p ${namespace} -f $test_compose rm -fv
 
 #docker-compose -p ${namespace} run --name "test" --rm --entrypoint '/bin/bash' jenkins -x /test/unit/version.sh
 #docker-compose -p ${namespace} run --name "test" --rm --entrypoint '/bin/bash' jenkins -c /usr/local/bin/docker-compose
-exit 0
+exit $ret

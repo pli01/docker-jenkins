@@ -46,6 +46,7 @@ Runtime configuration can be provided using environment variables:
 * LDAP_DISPLAY_NAME_ATTRIBUTE_NAME, LDAP object field used as a display name
 * LDAP_DISABLE_MAIL_ADDRESS_RESOLVER, flag indicating if the email address resolver should be disabled
 * LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME, LDAP object field used as a email address
+* LDAP_IGNORE_IF_UNAVAILABLE, Ignore LDAP failed connection if unavailable and pass to the second LDAP
 
 
 ```
@@ -84,6 +85,7 @@ Runtime configuration can be provided using environment variables:
       LDAP_DISPLAY_NAME_ATTRIBUTE_NAME="displayName" 
       LDAP_DISPLAY_NAME_ATTRIBUTE_NAME="cn" 
       LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME="mail" 
+      LDAP_IGNORE_IF_UNAVAILABLE="false"
   
 ```
 
