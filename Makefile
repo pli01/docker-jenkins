@@ -1,7 +1,7 @@
 #
 PACKAGENAME ?= docker-jenkins
 IMAGE_NAME ?= ci-tool-stack/jenkins
-VERSION ?= latest
+VERSION ?= lts
 
 project ?=
 env ?= # dev
