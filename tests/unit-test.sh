@@ -54,6 +54,17 @@ else
   ret=1
 fi
 
+echo "Check ansible-lint version"
+docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'ansible-lint --version'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] ansible-lint version"
+else
+  echo "[FAILED] ansible-lint version"
+  ret=1
+fi
+
+
 echo "Check LDAP config"
 docker-compose -p ${namespace} -f $test_compose up -d --no-build $test_service
 

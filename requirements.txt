@@ -1,1 +1,2 @@
 jenkins-job-builder==1.6.2
+ansible-lint==3.3.3
