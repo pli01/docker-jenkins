@@ -18,7 +18,7 @@ else
   ret=1
 fi
 echo "Check Jenkins version"
-if [ "$VERSION" == "latest" ] ;then
+if [ "$VERSION" == "latest" -o "$VERSION" == "lts" ] ;then
 docker-compose -p ${namespace} run --name "test-$test_service" --rm $test_service --version
 test_result=$?
 else
