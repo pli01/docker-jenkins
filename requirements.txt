@@ -1,2 +1,9 @@
 jenkins-job-builder==1.6.2
+# explicit depencies for jenkins-job-builder
+PyYAML==3.12
+python-jenkins==0.4.16
+six==1.11.0
+pbr==4.0.0
+multi-key-dict==2.0.3
+#
 ansible-lint==3.3.3

@@ -64,6 +64,15 @@ else
   ret=1
 fi
 
+echo "Check jenkins-jobs version"
+docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'jenkins-jobs --version'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] jenkins-jobs version"
+else
+  echo "[FAILED] jenkins-jobs version"
+  ret=1
+fi
 
 echo "Check LDAP config"
 docker-compose -p ${namespace} -f $test_compose up -d --no-build $test_service
