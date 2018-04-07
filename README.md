@@ -1,5 +1,7 @@
 ## Jenkins Docker Container
 
+[![Build Status](https://travis-ci.org/pli01/docker-jenkins.svg?branch=master)](https://travis-ci.org/pli01/docker-jenkins)
+
 Usage:
 ```
 $ docker build -t jenkins .
