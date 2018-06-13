@@ -39,16 +39,16 @@ ENV DOCKER_ENGINE_VERSION=latest \
 
 USER root
 # Use nexus repo to speed up build if MIRROR_DEBIAN defined
-RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
-     sed -i.orig -e "s|http://deb.debian.org/debian|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org/debian-security|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list ; cat /etc/apt/sources.list.orig
-
 # Customize jenkins at startup
 # install package requirements
-RUN apt-get -q update \
+RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
+     sed -i.orig -e "s|http://deb.debian.org/debian|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org/debian-security|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list ; cat /etc/apt/sources.list /etc/apt/sources.list.orig ; \
+     apt-get -q update \
       && apt-get install -qy --no-install-recommends sudo curl \
         $PACKAGE_CUSTOM \
       && apt-get install -qy libltdl7 \
       && rm -rf /var/lib/apt/lists/*
+
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 # Enable pam authent: jenkins user need to read shadow
