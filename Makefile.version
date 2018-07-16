@@ -1,0 +1,3 @@
+#
+PACKAGENAME ?= docker-jenkins
+IMAGE_NAME ?= ci-tool-stack/jenkins
