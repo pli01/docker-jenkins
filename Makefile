@@ -35,13 +35,13 @@ pull-docker-compose:
 
 save-docker: Dockerfile.$(VERSION)
 	docker_image=$$(grep ^FROM Dockerfile.$(VERSION) | awk ' { print $$2 }') ; \
-		     docker_image_file=$$(echo $$docker_image| tr ':' '__') ; \
+	  docker_image_file=$$(echo $$docker_image| sed -e 's|/|_|g ; s|:|__|g') ; \
 	  docker image save $$docker_image | gzip -9c > $(DESTDIR)$${docker_image_file}.tar.gz ; \
 	  md5sum $(DESTDIR)$${docker_image_file}.tar.gz
 
 save-docker-compose: Dockerfile.$(VERSION)
 	docker_image=$$(docker-compose $(compose_args) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)'  | jq -r '.services[].image') ; \
-	docker_image_file=$$(echo $$docker_image| tr '/' '_' | tr ':' '__') ; \
+	  docker_image_file=$$(echo $$docker_image| sed -e 's|/|_|g ; s|:|__|g') ; \
 	  docker image save $$docker_image | gzip -9c > $(DESTDIR)$${docker_image_file}.tar.gz ; \
 	  md5sum $(DESTDIR)$${docker_image_file}.tar.gz
 
@@ -78,7 +78,7 @@ test: build unit-test
 
 unit-test:
 	@echo '# $@ STARTING'
-	( cd tests && VERSION=$(VERSION) bash unit-test.sh $(IMAGE_NAME) $(VERSION) )
+	( cd tests && bash unit-test.sh $(IMAGE_NAME) $(VERSION) )
 	@echo '# $@ SUCCESS'
 
 publish: package dist/$(PACKAGENAME)-$(VERSION).tar.gz

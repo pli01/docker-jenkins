@@ -2,7 +2,7 @@
 #set -x
 
 image_name=${1:? $(basename $0) IMAGE_NAME VERSION needed}
-version=${2:-latest}
+VERSION=${2:-latest}
 namespace=jenkins
 test_service=jenkins
 test_compose=docker-compose.yml
@@ -35,7 +35,7 @@ fi
 
 test -t 1 && USE_TTY="-t"
 echo "Check docker version"
-docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'docker version || true'
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'docker version || true'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] docker version"
@@ -45,7 +45,7 @@ else
 fi
 
 echo "Check docker-compose version"
-docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'docker-compose -p ${namespace} version || true'
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'docker-compose -p ${namespace} version || true'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] docker-compose version"
@@ -55,7 +55,7 @@ else
 fi
 
 echo "Check ansible-lint version"
-docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'ansible-lint --version'
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'ansible-lint --version'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] ansible-lint version"
@@ -65,7 +65,7 @@ else
 fi
 
 echo "Check jenkins-jobs version"
-docker run -i ${USE_TTY} --rm $image_name:$version /bin/bash -c 'jenkins-jobs --version'
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'jenkins-jobs --version'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] jenkins-jobs version"
