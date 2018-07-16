@@ -13,21 +13,27 @@ compose_args += $(shell [ -f  docker-compose.$(env).yml ] && echo "-f docker-com
 .PHONY: clean-image config
 all: stop rm up
 clean:
+	rm -rf Dockerfile.template Dockerfile.$(VERSION)
 	$(sudo) docker system prune -f
-	if [ -f Dockerfile.template ] ; then rm -rf Dockerfile.template ; fi
-	if [ -f Dockerfile.$(VERSION) ] ; then rm -rf Dockerfile.$(VERSION) ; fi
 .PHONY: config
 config:
 	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) config
 
 .PHONY: build
 prepare:
-	if [ ! -f Dockerfile.template ] ; then cp Dockerfile Dockerfile.template ; fi
+	cp Dockerfile Dockerfile.template
 	sed -e 's|\(FROM .*\):\(.*\)|\1:$(VERSION)|' Dockerfile.template > Dockerfile.$(VERSION)
 build: prepare config
 	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) build
-pull:
+
+pull:  pull-docker pull-docker-compose
+
+pull-docker: Dockerfile.$(VERSION)
+	docker_image=$$(grep ^FROM Dockerfile.$(VERSION) | awk ' { print $$2 }') ; \
+		     docker pull $$docker_image
+pull-docker-compose:
 	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) pull
+
 up:
 	$(sudo) docker-compose $(compose_args) up -d
 restart:
@@ -57,6 +63,7 @@ clean-package:
 .PHONY: test
 test: build unit-test
 	@echo '# $@ SUCCESS'
+
 
 unit-test:
 	@echo '# $@ STARTING'
