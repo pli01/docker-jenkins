@@ -12,12 +12,26 @@ REGISTRY_PASSWORD=${REGISTRY_PASSWORD:? REGISTRY_PASSWORD not defined}
 
 IMAGE_NAME=${1:? $(basename $0) IMAGE_NAME VERSION needed}
 TAG=${2:? $(basename $0) IMAGE_NAME VERSION needed}
+BUILD_VERSION=${3:-}
 
 docker tag $IMAGE_NAME:$TAG $REGISTRY_URL/$IMAGE_NAME:$TAG
+if [ ! -z "$BUILD_VERSION" ] ; then
+  docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:$BUILD_VERSION
+  docker tag $IMAGE_NAME:$TAG $REGISTRY_URL/$IMAGE_NAME:$BUILD_VERSION
+fi
+
 docker login -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD $REGISTRY_URL
 docker push $REGISTRY_URL/$IMAGE_NAME:$TAG
+if [ ! -z "$BUILD_VERSION" ] ; then
+  docker push $REGISTRY_URL/$IMAGE_NAME:$BUILD_VERSION
+fi
 docker logout $REGISTRY_URL
+
 docker rmi $REGISTRY_URL/$IMAGE_NAME:$TAG
+if [ ! -z "$BUILD_VERSION" ] ; then
+  docker rmi $IMAGE_NAME:$BUILD_VERSION
+  docker rmi $REGISTRY_URL/$IMAGE_NAME:$BUILD_VERSION
+fi
 
 
 echo $?

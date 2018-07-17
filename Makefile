@@ -1,6 +1,7 @@
 #
 include Makefile.version
 VERSION ?= $(shell [ -f VERSION ] && cat VERSION)
+BUILD_VERSION ?= # BUILD_VERSION=$(cat VERSION)-$(git rev-parse --short HEAD)
 
 project ?=
 env ?= # dev
@@ -88,7 +89,7 @@ publish: package dist/$(PACKAGENAME)-$(VERSION).tar.gz
 
 push:
 	@echo "# $@ STARTING"
-	bash ./tools/push.sh $(IMAGE_NAME) $(VERSION)
+	bash ./tools/push.sh $(IMAGE_NAME) $(VERSION) $(BUILD_VERSION)
 	@echo '# $@ SUCCESS'
 
 push-docker:
