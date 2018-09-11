@@ -14,7 +14,7 @@ ARG PACKAGE_CUSTOM="ruby make ansible git unzip python-pip python-dev python-ope
      curl \
      gnupg2 \
      software-properties-common \
-     debootstrap rinse"
+     debootstrap rinse jq"
 
 # Docker versions Env Variables
 ENV DOCKER_ENGINE_VERSION=latest \
