@@ -92,7 +92,7 @@ COPY plugins.txt.latest /usr/share/jenkins/plugins.txt
 RUN \
     RETRY_NB=5 ; RETRY_DELAY_IN_SEC=1 ; n=0 ; state=1 ; until [ $n -ge $RETRY_NB ] || [ $state -eq 0 ]; do \
      if /usr/local/bin/install-plugins.sh < /usr/share/jenkins/plugins.txt ; then state=$? ; \
-     else echo "Retry $n/$RETRY_NB"; sleep $RETRY_DELAY_IN_SEC ; sleep 1 ; fi ; ((n++)) ; done
+     else echo "Retry $n/$RETRY_NB"; sleep $RETRY_DELAY_IN_SEC ; sleep 1 ; fi ; n=$(expr $n + 1) ; done
 
 # Adding default Jenkins Seed Job
 #COPY jobs/job-dsl-seed-job.xml /usr/share/jenkins/ref/jobs/job-dsl-seed-job/config.xml
