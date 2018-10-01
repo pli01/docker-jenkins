@@ -6,6 +6,7 @@ VERSION=${2:-latest}
 namespace=jenkins
 test_service=jenkins
 test_compose=docker-compose.yml
+export VERSION
 
 ret=0
 echo "Check tests/docker-compose.yml config"
