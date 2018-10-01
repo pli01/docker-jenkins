@@ -34,6 +34,7 @@ github-api:latest
 github-branch-source:latest
 github:latest
 gitlab-hook:latest
+gitlab-oauth:latest
 gradle:latest
 greenballs:latest
 handlebars:latest
