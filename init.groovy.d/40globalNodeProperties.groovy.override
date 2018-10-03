@@ -9,6 +9,7 @@ def httpProxy = env['http_proxy'] ?: ""
 def httpsProxy = env['https_proxy'] ?: ""
 def targetPlateformeName = env['TARGET_PLATEFORME_NAME'] ?: ""
 def targetPlateformeEmail = env['TARGET_PLATEFORME_EMAIL'] ?: ""
+def gitSslNoVerify = env['GIT_SSL_NO_VERIFY'] ?: ""
 
 logger = Logger.getLogger("globalNodeProperties Updater")
 nodes = Jenkins.instance.globalNodeProperties
@@ -31,6 +32,7 @@ envVars["JENKINS_HTTPS_PROXY"] = httpsProxy
 
 envVars["TARGET_PLATEFORME_NAME"] = targetPlateformeName
 envVars["TARGET_PLATEFORME_EMAIL"] = targetPlateformeEmail
+envVars["GIT_SSL_NO_VERIFY"] = gitSslNoVerify
 
 Jenkins.instance.save()
 logger.info("--> Global env var updated")

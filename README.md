@@ -34,6 +34,11 @@ Runtime configuration can be provided using environment variables:
 * GIT_GLOBAL_CONFIG_NAME: Configure git plugin, Define git jenkins name when commit
 * GIT_GLOBAL_CONFIG_EMAIL: Configure git plugin, Define git email
 
+* for environnement global variable
+* TARGET_PLATEFORME_NAME: Define target plateforme (dev,stage)
+* TARGET_PLATEFORME_EMAIL: Define target email plateforme (build-team@factory.tld)
+* GIT_SSL_NO_VERIFY: (default : empty) (true to disable SSL verification on git https clone)
+
 * for ldap realm
 * LDAP_SERVER, the LDPA URI, i.e. ldap-host:389
 * LDAP_ROOTDN, the LDAP BASE_DN
