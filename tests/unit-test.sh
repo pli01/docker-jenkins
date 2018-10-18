@@ -85,6 +85,28 @@ else
   ret=1
 fi
 
+echo "Check yamllint version"
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'yamllint --version'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] yamllint version"
+else
+  echo "[FAILED] yamllint version"
+  ret=1
+fi
+
+echo "Check jq version"
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'jq --version'
+test_result=$?
+if [ "$test_result" -eq 0 ] ; then
+  echo "[PASSED] jq version"
+else
+  echo "[FAILED] jq version"
+  ret=1
+fi
+
+
+
 echo "Check LDAP config"
 docker-compose -p ${namespace} -f $test_compose up -d --no-build $test_service
 
