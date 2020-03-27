@@ -128,6 +128,7 @@ until [ $n -ge $RETRY_NB ] || [ $state -eq 0 ]; do
  ((n++))
 done
 
+docker-compose -p ${namespace} -f $test_compose exec -T $test_service /bin/bash -c 'cat $HOME/config.xml'
 docker-compose -p ${namespace} -f $test_compose exec -T $test_service /bin/bash -c 'grep ignoreIfUnavailable $HOME/config.xml'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
