@@ -27,3 +27,13 @@ before_script:
   - docker version
 script:
   - make build test
+deploy:
+  - provider: script
+    script: ci/deploy.sh dev $TRAVIS_BRANCH
+    cleanup: true
+    on:
+      branch: dev/*
+after_script:
+  - make clean-images
+  - echo "END"
+
