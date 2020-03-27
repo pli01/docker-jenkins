@@ -1,19 +1,29 @@
-language: python
-python: '2.7'
-sudo: required
+os: linux
+dist: trusty
+
+language: shell
+
+services:
+  - docker
 
 env:
   - DOCKER_COMPOSE_VERSION=1.19.0
 
-services:
-  - docker
+addons:
+  apt:
+    packages:
+      - docker-ce
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - sudo apt-get update -qq
-  - sudo apt-get install -qy make
+  - sudo apt-get -qq update
+  - sudo apt-get install -qy make apt-transport-https ca-certificates curl software-properties-common gawk jq parallel curl
+before_script:
+  - uname -a
+  - type -a docker-compose && docker-compose version
+  - docker version
 script:
   - make build test
