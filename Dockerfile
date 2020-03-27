@@ -6,6 +6,7 @@ ARG PYPI_HOST
 ARG MIRROR_DOCKER
 ARG MIRROR_DOCKER_COMPOSE
 ARG JENKINS_UC_URL
+ARG VERSION
 
 # Package custom
 ARG PACKAGE_CUSTOM="ruby make ansible git unzip python-pip python-dev python-openstackclient python-heatclient jenkins-job-builder  python-wheel \
