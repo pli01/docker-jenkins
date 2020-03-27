@@ -19,6 +19,7 @@ services:
         - JENKINS_UC_URL
         - PYPI_URL
         - PYPI_HOST
+        - VERSION
 
 #    restart: always
     ports:
