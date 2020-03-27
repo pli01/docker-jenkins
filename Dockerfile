@@ -88,7 +88,7 @@ RUN curl -L $MIRROR_DOCKER_COMPOSE/download/1.19.0/docker-compose-`uname -s`-`un
 USER jenkins
 # installing specific list of plugins. see: https://github.com/jenkinsci/docker#preinstalling-plugins
 
-COPY plugins.txt.latest /usr/share/jenkins/plugins.txt
+COPY plugins.txt.${VERSION:-latest} /usr/share/jenkins/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/plugins.txt
 
 # Adding default Jenkins Seed Job
