@@ -46,7 +46,7 @@ else
 fi
 
 echo "Check docker-compose version"
-docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'docker-compose -p ${namespace} version || true'
+docker run -i ${USE_TTY} --rm $image_name:$VERSION /bin/bash -c 'docker-compose version || true'
 test_result=$?
 if [ "$test_result" -eq 0 ] ; then
   echo "[PASSED] docker-compose version"
